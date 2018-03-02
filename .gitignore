@@ -1,2 +1,5 @@
 # Atom Python IDE
 .ropeproject/
+
+# Compiled Python Files
+*.pyc
