@@ -15,6 +15,12 @@ def distanceBetween(Intersection1, Intersection2):
         + abs(Intersection1.col - Intersection2.col)
 
 
+def cmpInters(Intersection1, Intersection2):
+    """Return True if both intersections have equal parameters"""
+    return Intersection1.row == Intersection2.row and\
+        Intersection1.col == Intersection2.col
+
+
 class Ride:
     """Defines a ride by its input parameters"""
 
@@ -33,9 +39,10 @@ class Vehicle:
     def __init__(self):
         """All vehicles should start from (0, 0)"""
         self.currPos = Intersection(0, 0)
-        self.isBusy = False
         self.assignedRides = list()
+        self.isBusy - False
         self.currRide = None
+        self.hasReachedRideStartPos = False
 
     def __str__(self):
         """Return the string formed from the list with all assigned rides;
@@ -43,6 +50,13 @@ class Vehicle:
         Very useful for the output
         """
         return self.assignedRides.join(" ")
+
+    def distanceToRide(self, ride):
+        """Return the distance to the start intersection of a ride"""
+        return distanceBetween(self.currPos, ride.startPos)
+
+    def hasReachedDestination(self):
+        return cmpInters(self.currPos, self.currRide.endPos)
 
     def checkIfPossibleAndAssignRide(self, newRide, currStep):
         """Check whether the ride can be completed on time and assigns it;
@@ -59,7 +73,17 @@ class Vehicle:
             self.currRide = newRide
             self.assignedRides.append(newRide)
             self.isBusy = True
+            self.hasReachedRideStartPos = False
             return True
         else:
             print "Unable to complete the ride in time"
             return False
+
+    def move(self, currStep):
+        """Either moves the vehicle one step towards its goal
+        or stays in the same place according to the rules
+        of the simulation
+        """
+        # First we move it to the correct row
+        # Then to the correct column
+        # TBA...
