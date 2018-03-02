@@ -28,15 +28,38 @@ class Ride:
         self.earliestStep = earliestStepToStart
         self.latestStep = latestStepToFinish
 
-    def __str__(self):
-        """Return all ride parameters in a single-line string; for test only"""
-        return self.startPos.row,\
-            self.startPos.col,\
-            self.endPos.row,\
-            self.endPos.col,\
-            self.earliestStep,\
-            self.latestStep
-
 
 class Vehicle:
-    pass
+    def __init__(self):
+        """All vehicles should start from (0, 0)"""
+        self.currPos = Intersection(0, 0)
+        self.isBusy = False
+        self.assignedRides = list()
+        self.currRide = None
+
+    def __str__(self):
+        """Return the string formed from the list with all assigned rides;
+
+        Very useful for the output
+        """
+        return self.assignedRides.join(" ")
+
+    def checkIfPossibleAndAssignRide(self, newRide, currStep):
+        """Check whether the ride can be completed on time and assigns it;
+
+        Returns True if assigned and False if not assigned.
+        """
+        # the minimum time required to accomplish the Ride
+        # equals the distance
+        # from the current position of the car
+        # to the last intersection of the Ride
+        minTimeToGo = distanceBetween(self.currPos, newRide.endPos)
+
+        if minTimeToGo <= newRide.latestStep - currStep:
+            self.currRide = newRide
+            self.assignedRides.append(newRide)
+            self.isBusy = True
+            return True
+        else:
+            print "Unable to complete the ride in time"
+            return False
