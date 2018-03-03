@@ -119,3 +119,9 @@ for currStep in range(numberOfStepsT):
 with file("output/"+filename+".out", "w") as outputFile:
     for taxi in (freeVehicles + busyVehicles):
         outputFile.write(str(len(taxi.assignedRides))+" "+repr(taxi)+"\n")
+
+        # DEBUG:
+        print "taxi rides: ",
+        for x in taxi.assignedRides:
+            print x.id,
+        print

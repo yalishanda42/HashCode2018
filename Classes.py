@@ -81,9 +81,11 @@ class Vehicle:
             self.assignedRides.append(newRide)
             self.isBusy = True
             self.hasReachedRideStartPos = False
+            # DEBUG:
+            print "Ride{} assigned to vehicle.".format(str(newRide.id))
+            # ------
             return True
         else:
-            print "Unable to complete the ride in time"
             return False
 
     def _move1StepCloserTo(self, toDestination):
@@ -123,4 +125,5 @@ class Vehicle:
         if not self.hasReachedRideStartPos:
             self._move1StepCloserTo(self.currRide.startPos)
         else:
-            self._move1StepCloserTo(self.currRide.endPos)
+            if currStep >= self.currRide.earliestStep:
+                self._move1StepCloserTo(self.currRide.endPos)
