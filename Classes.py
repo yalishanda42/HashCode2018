@@ -1,4 +1,4 @@
-"""Define all needed classes and methods related to them."""
+toRow"""Define all needed classes and methods related to them."""
 
 
 class Intersection:
@@ -34,6 +34,9 @@ class Ride:
         self.earliestStep = earliestStepToStart
         self.latestStep = latestStepToFinish
 
+    def getRideDistance(self):
+        return distanceBetween(self.startPos, self.endPos)
+
 
 class Vehicle:
     def __init__(self):
@@ -63,11 +66,13 @@ class Vehicle:
 
         Returns True if assigned and False if not assigned.
         """
-        # the minimum time required to accomplish the Ride
+        # the minimum time required to accomplish the ride
         # equals the distance
         # from the current position of the car
-        # to the last intersection of the Ride
-        minTimeToGo = distanceBetween(self.currPos, newRide.endPos)
+        # to the last intersection of the ride
+        # through the first intersection of the ride
+        minTimeToGo = distanceBetween(self.currPos, newRide.startPos)\
+            + newRide.endPos
 
         if minTimeToGo <= newRide.latestStep - currStep:
             self.currRide = newRide
@@ -79,11 +84,41 @@ class Vehicle:
             print "Unable to complete the ride in time"
             return False
 
-    def move(self, currStep):
-        """Either moves the vehicle one step towards its goal
-        or stays in the same place according to the rules
+    def _move1StepCloserTo(self, toDestination):
+        """Helper function; for use in self.move() only.
+
+        Either move the vehicle one step towards its goal
+        or stay in the same place according to the rules
         of the simulation
         """
+        currRow = self.currPos.row
+        currCol = self.currPos.col
+        toRow = toDestination.row
+        toCol = toDestination.col
+
         # First we move it to the correct row
+        if currRow < toRow:
+            currRow += 1
+
+        elif currRow > toRow:
+            currRow -= 1
+
         # Then to the correct column
-        # TBA...
+        elif currCol < toCol:
+            currCol += 1
+            if currCol == toCol:
+                self.hasReachedRideStartPos = True
+
+        elif currCol > toCol:
+            currCol -= 1
+            if currCol == toCol:
+                self.hasReachedRideStartPos = True
+
+    def move(self, currStep):
+        """First move the vehicle towards the beginning inresection of the ride
+        then move it towards the end.
+        """
+        if not self.hasReachedRideStartPos:
+            self._move1StepCloserTo(self.currRide.startPos)
+        else:
+            self._move1StepCloserTo(self.currRide.endPos)
