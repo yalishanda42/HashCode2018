@@ -23,7 +23,7 @@ pastRides = list()
 filename = raw_input("Enter name of input file (without '.in' suffix): ")
 
 try:
-    inputFile = open(filename+'.in', "r")
+    inputFile = open('input/'+filename+'.in', "r")
 
 except Exception:
     print "File operation unsuccessfull."
@@ -55,9 +55,13 @@ for i in range(numberOfRidesN):
     newRide = Ride(Intersection(startRow, startCol),
                    Intersection(endRow, endCol),
                    earliestStep,
-                   latestStep)
+                   latestStep,
+                   i)
 
     waitingRides.append(newRide)
+
+# Input reading finished
+inputFile.close()
 
 # Spawn F Vehicles
 for f in range(numberOfVehiclesF):
@@ -109,3 +113,9 @@ for currStep in range(numberOfStepsT):
 # -----------------
 # END OF SIMULATION
 # -----------------
+
+
+# Output to file
+with file("output/"+filename+".out", "w") as outputFile:
+    for taxi in (freeVehicles + busyVehicles):
+        outputFile.write(str(len(taxi.assignedRides))+" "+repr(taxi)+"\n")

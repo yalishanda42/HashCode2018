@@ -1,4 +1,4 @@
-toRow"""Define all needed classes and methods related to them."""
+"""Define all needed classes and methods related to them."""
 
 
 class Intersection:
@@ -28,11 +28,13 @@ class Ride:
                  startIntersection,
                  endIntersection,
                  earliestStepToStart,
-                 latestStepToFinish):
+                 latestStepToFinish,
+                 id):
         self.startPos = startIntersection
         self.endPos = endIntersection
         self.earliestStep = earliestStepToStart
         self.latestStep = latestStepToFinish
+        self.id = str(id)  # used for the output
 
     def getRideDistance(self):
         return distanceBetween(self.startPos, self.endPos)
@@ -43,16 +45,16 @@ class Vehicle:
         """All vehicles should start from (0, 0)"""
         self.currPos = Intersection(0, 0)
         self.assignedRides = list()
-        self.isBusy - False
+        self.isBusy = False
         self.currRide = None
         self.hasReachedRideStartPos = False
 
-    def __str__(self):
-        """Return the string formed from the list with all assigned rides;
+    def __repr__(self):
+        """Return the string formed from the list with all assigned rides' id's;
 
         Very useful for the output
         """
-        return self.assignedRides.join(" ")
+        return " ".join([(lambda r: r.id)(r) for r in self.assignedRides])
 
     def distanceToRide(self, ride):
         """Return the distance to the start intersection of a ride"""
@@ -72,7 +74,7 @@ class Vehicle:
         # to the last intersection of the ride
         # through the first intersection of the ride
         minTimeToGo = distanceBetween(self.currPos, newRide.startPos)\
-            + newRide.endPos
+            + newRide.getRideDistance()
 
         if minTimeToGo <= newRide.latestStep - currStep:
             self.currRide = newRide
