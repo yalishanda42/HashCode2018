@@ -67,13 +67,17 @@ inputFile.close()
 for f in range(numberOfVehiclesF):
     freeVehicles.append(Vehicle())
 
+# Sort the waiting rides by 'emergency'
+waitingRides = sorted(waitingRides, key=lambda ride: ride.earliestStep)
+
 
 # ----------
 # SIMULATION
 # ----------
 for currStep in range(numberOfStepsT):
-    # Sort the waiting rides by 'emergency'
-    waitingRides = sorted(waitingRides, key=lambda ride: ride.earliestStep)
+    # DEBUG: shows every 1k steps in the console
+    if currStep % 1000 == 0:
+        print "Step >=", currStep
 
     for ride in waitingRides:
         # Some rides may be impossible to complete; we skip them

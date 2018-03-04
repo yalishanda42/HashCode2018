@@ -81,9 +81,7 @@ class Vehicle:
             self.assignedRides.append(newRide)
             self.isBusy = True
             self.hasReachedRideStartPos = False
-            # DEBUG:
-            print "Ride{} assigned to vehicle.".format(str(newRide.id))
-            # ------
+
             return True
         else:
             return False
@@ -102,20 +100,19 @@ class Vehicle:
 
         # First we move it to the correct row
         if currRow < toRow:
-            currRow += 1
+            self.currPos.row += 1
 
         elif currRow > toRow:
-            currRow -= 1
-
+            self.currPos.row -= 1
         # Then to the correct column
         elif currCol < toCol:
-            currCol += 1
-            if currCol == toCol:
+            self.currPos.col += 1
+            if self.currPos.col == toCol:
                 self.hasReachedRideStartPos = True
 
         elif currCol > toCol:
-            currCol -= 1
-            if currCol == toCol:
+            self.currPos.col -= 1
+            if self.currPos.col == toCol:
                 self.hasReachedRideStartPos = True
 
     def move(self, currStep):
